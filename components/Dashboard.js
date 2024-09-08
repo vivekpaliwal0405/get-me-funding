@@ -4,15 +4,23 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 
 const Dashboard = () => {
-    const { data: session } = useSession()
+    const { data: session,status } = useSession()
     const router = useRouter()
     const [form, setform] = useState({})
 
     useEffect(()=>{
-              if(!session) {
+        if (status === "unauthenticated") {
             router.push("/login")
+        } else if (status === "authenticated" && session) {
+            console.log("User details:", session.user)
+            setform({
+                name: session.user.name || "",
+                email: session.user.email || "",
+                username: session.user.name?.split(" ")[0] || "",
+                profile: session.user.image || "",
+            })
         }
-    },[router, session])
+    }, [status, session, router])
 
     const handleChange=(e) => {
         setform({ ...form, [e.target.name]: e.target.value })

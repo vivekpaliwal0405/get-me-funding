@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import mongoose from "mongoose";
 import User from '@/models/User'
 import Payment from '@/models/Payment'
+import connectDb from "@/db/connectDb";
 
 
 
@@ -26,8 +27,7 @@ export const authoption = NextAuth({
           }
     
           // Connect to the database
-          const client = await mongoose.connect("mongodb://localhost:27017/fund");
-    
+          await connectDb();
           // Check if user exists
           const currentUser = await User.findOne({ email: userEmail });
           if (!currentUser) {
@@ -36,18 +36,21 @@ export const authoption = NextAuth({
               email: userEmail,
               username: userEmail.split("@")[0], // Split based on email
             });
-            await newUser.save();
-            user.name = newUser.username;
-          } else {
-            user.name = currentUser.username;
-          }
-          console.log(currentUser)
-    
+          
+          } 
+          console.log("User details:", user);
           return true;
         }
       },
-    }
+    },
+
+    async session({ session, user, token }) {
+      const dbUser = await User.findOne({email: session.user.email})
+      session.user.name = dbUser.username;
+      return session
+    },
     
   },
 );
 export { authoption as GET, authoption as POST };
+
