@@ -15,7 +15,7 @@ const handleChange =(e)=>{
 }
     const pay = async(amount)=>{
         let a = await initiate(amount, session?.user.name, paymentform)
-        let orderId =a.id
+        let orderId = a.id
         var options = {
         "key": process.env.KEY_ID, // Enter the Key ID generated from the Dashboard
         "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -23,7 +23,7 @@ const handleChange =(e)=>{
         "name": "Get Me Funding", //your business name
         "description": "Test Transaction",
         "image": "https://example.com/your_logo",
-        "order_id": "orderId", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "callback_url": `${process.env.URL}/api/razorpay`,
         "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
             "name": "Gaurav Kumar", //your customer's name
@@ -93,12 +93,12 @@ const handleChange =(e)=>{
         <div className="w-full mb-2">
           <input type="text" className="w-full p-2 mb-2 rounded-lg  text-white bg-slate-800" placeholder="Enter Name" onChange={handleChange} name="name" value={paymentform.name}/>
 
-          <input type="text" className="w-full p-2 rounded-lg text-white bg-slate-800" placeholder="Enter Message" onChange={handleChange} value={paymentform.message}/>
+          <input type="text" className="w-full p-2 rounded-lg text-white bg-slate-800" name='message' placeholder="Enter Message" onChange={handleChange} value={paymentform.message}/>
 
         </div>
         <div className="flex gap-2">
-        <input type="text" className='w-full p-3 rounded-lg bg-slate-800' placeholder='Enter your Amount' onChange={handleChange} value={paymentform.amount}/>
-        <button type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 p-3 text-center me-2 ">Pay</button>
+        <input type="text" className='w-full p-3 rounded-lg bg-slate-800' name='amount' placeholder='Enter your Amount' onChange={handleChange} value={paymentform.amount}/>
+        <button type="button" className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 p-3 text-center me-2 ">Pay</button>
         </div>
 
         {/* or choose from these amount */}
